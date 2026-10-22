@@ -3,18 +3,17 @@
  * PWA آف لائن سپورٹ اور تیز رفتار کیشنگ
  */
 
-const CACHE_NAME = 'bz-ai-pwa-v1';
+const CACHE_NAME = 'bz-ai-pwa-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/css/style.css',
   '/js/app.js',
   '/manifest.json',
-  '/icons/icon.svg',
-  '/icons/favicon.svg',
-  '/icons/icon-192.png',
   '/icons/icon-512.png',
-  '/icons/apple-touch-icon.png'
+  '/icons/icon-192.png',
+  '/icons/apple-touch-icon.png',
+  '/icons/favicon.png'
 ];
 
 // انسٹالیشن ایونٹ: بنیادی فائلیں کیشے میں محفوظ کریں
@@ -41,28 +40,28 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// فیچ ایونٹ: نیٹ ورک پہلے، اگر آف لائن ہو تو کیشے
+// فیچ ایونٹ: کیشے فرسٹ اور نیٹ ورک فال بیک حکمتِ عملی
 self.addEventListener('fetch', (event) => {
-  // API کالز کے لیے ہمیشہ نیٹ ورک سے تازہ ترین ڈیٹا حاصل کریں
+  // API کالز کے لیے ہمیشہ نیٹ ورک استعمال کریں
   if (event.request.url.includes('/api/')) {
     event.respondWith(
       fetch(event.request).catch(() => {
         return new Response(JSON.stringify({
-          found: false,
-          refusal: "آپ فی الحال آف لائن ہیں۔ تازہ سوالات کے لیے انٹرنیٹ سے رابطہ درکار ہے۔"
+          error: 'آف لائن حالت',
+          message: 'انٹرنیٹ کنکشن دستیاب نہیں ہے۔ براہ کرم انٹرنیٹ بحال ہونے پر دوبارہ کوشش کریں۔'
         }), {
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json; charset=utf-8' }
         });
       })
     );
     return;
   }
 
-  // اسٹیٹک ریسورسز (CSS/JS/Icons/HTML)
+  // اسٹیٹک اثاثہ جات کے لیے کیشے فرسٹ
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
-        // بیک گراؤنڈ میں تازہ کاری کریں
+        // بیک گراؤنڈ میں کیشے اپ ڈیٹ کریں (Stale While Revalidate)
         fetch(event.request).then((networkResponse) => {
           if (networkResponse && networkResponse.status === 200) {
             caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse));
