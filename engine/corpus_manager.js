@@ -8,6 +8,13 @@ const path = require('path');
 const os = require('os');
 const pdfParse = require('pdf-parse');
 
+let memoryCorpus = null;
+try {
+  memoryCorpus = require('../data/bahishti_zewar.json');
+} catch (e) {
+  memoryCorpus = null;
+}
+
 // ڈیٹا بیس کا درست راستہ معلوم کرنا (ورسل اور لوکل دونوں ماحول میں)
 function resolveDbPath() {
   const candidates = [
@@ -43,6 +50,9 @@ try {
  * ڈیٹا بیس لوڈ کرنا
  */
 function getCorpus() {
+  if (memoryCorpus && Array.isArray(memoryCorpus) && memoryCorpus.length > 0) {
+    return memoryCorpus;
+  }
   try {
     const targetPath = resolveDbPath();
     if (fs.existsSync(targetPath)) {

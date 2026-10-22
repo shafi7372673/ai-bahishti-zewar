@@ -7,6 +7,13 @@ const fs = require('fs');
 const path = require('path');
 const { normalizeUrdu, tokenizeUrdu, expandQuery, STOPWORDS } = require('./normalizer');
 
+let memoryDatabase = null;
+try {
+  memoryDatabase = require('../data/bahishti_zewar.json');
+} catch (e) {
+  memoryDatabase = null;
+}
+
 function resolveDbPath() {
   const candidates = [
     path.join(__dirname, '../data/bahishti_zewar.json'),
@@ -32,6 +39,9 @@ const EXACT_REFUSAL_MESSAGE = "معذرت، فراہم کردہ کتاب بہش�
  * ڈیٹا بیس لوڈ کرنا
  */
 function loadDatabase() {
+  if (memoryDatabase && Array.isArray(memoryDatabase) && memoryDatabase.length > 0) {
+    return memoryDatabase;
+  }
   try {
     const targetPath = resolveDbPath();
     if (fs.existsSync(targetPath)) {

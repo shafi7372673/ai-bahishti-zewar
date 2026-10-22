@@ -29,21 +29,29 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// روٹ پاتھ ہینڈلر
+// روٹ پاتھ ہینڈلر (سرورلیس اور لوکل محفوظ طریقہ)
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  const indexPath = path.join(__dirname, 'public', 'index.html');
+  if (fs.existsSync(indexPath)) {
+    return res.sendFile(indexPath);
+  }
+  return res.redirect('/index.html');
 });
 
-// فائل اپلوڈ کنفیگریشن
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, UPLOAD_DIR);
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'bz-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
+// فائل اپلوڈ کنفیگریشن (ورسل سرورلیس کے لیے میموری اسٹوریج استعمال کریں تاکہ ڈسک کریش نہ ہو)
+const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+const storage = isServerless 
+  ? multer.memoryStorage()
+  : multer.diskStorage({
+      destination: function (req, file, cb) {
+        cb(null, UPLOAD_DIR);
+      },
+      filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, 'bz-' + uniqueSuffix + path.extname(file.originalname));
+      }
+    });
+
 const upload = multer({ 
   storage: storage,
   limits: { fileSize: 50 * 1024 * 1024 } // 50 MB
@@ -60,7 +68,7 @@ app.get('/api', (req, res) => {
  */
 app.post('/api/ask', async (req, res) => {
   try {
-    const { question, volumeFilter } = req.body;
+    const { question, volumeFilter } = req.body || {};
 
     if (!question || typeof question !== 'string' || question.trim().length === 0) {
       return res.status(400).json({
@@ -202,7 +210,7 @@ app.post('/api/upload-pdf', upload.single('pdfFile'), async (req, res) => {
  */
 app.post('/api/add-ruling', (req, res) => {
   try {
-    const { title, volume, volume_num, chapter, section, masala_no, page, original_text, easy_explanation, keywords } = req.body;
+    const { title, volume, volume_num, chapter, section, masala_no, page, original_text, easy_explanation, keywords } = req.body || {};
 
     if (!title || !original_text) {
       return res.status(400).json({ success: false, message: "عنوان اور اصل عبارت لازمی ہیں۔" });
@@ -240,7 +248,7 @@ app.get('/api/config-status', (req, res) => {
  */
 app.post('/api/save-api-key', (req, res) => {
   try {
-    const { apiKey } = req.body;
+    const { apiKey } = req.body || {};
     if (!apiKey || apiKey.trim().length === 0) {
       return res.status(400).json({ success: false, message: "API Key درکار ہے۔" });
     }
@@ -271,6 +279,15 @@ app.post('/api/save-api-key', (req, res) => {
   } catch (err) {
     return res.status(500).json({ success: false, error: err.message });
   }
+});
+
+// خرابیوں کو محفوظ طریقے سے ہینڈل کرنا تاکہ سرور کریش نہ ہو
+app.use((err, req, res, next) => {
+  console.error('AI Bahishti Zewar Server Error:', err);
+  res.status(500).json({ 
+    success: false, 
+    error: err.message || 'اندرونی سرور کی خرابی' 
+  });
 });
 
 // سرور کا آغاز (اگر ورسل سرورلیس نہ ہو)
