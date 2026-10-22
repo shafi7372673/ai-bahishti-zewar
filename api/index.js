@@ -1,18 +1,32 @@
 /**
- * Vercel Serverless Function Entrypoint
- * ورسل سرورلیس ہینڈلر برائے AI بہشتی زیور
+ * Vercel Serverless Function: /api
+ * بنیادی API ہیلتھ چیک
  */
 
-const app = require('../server');
-
-module.exports = (req, res) => {
-  try {
-    return app(req, res);
-  } catch (err) {
-    console.error('Vercel Serverless Invocation Crash:', err);
-    res.status(500).json({
-      success: false,
-      error: err.message || 'Serverless invocation error'
-    });
+function sendJson(res, statusCode, data) {
+  if (typeof res.status === 'function' && typeof res.json === 'function') {
+    return res.status(statusCode).json(data);
   }
+  res.statusCode = statusCode;
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.end(JSON.stringify(data));
+}
+
+module.exports = async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    res.statusCode = 200;
+    return res.end();
+  }
+
+  return sendJson(res, 200, {
+    status: 'ok',
+    service: 'AI Bahishti Zewar API',
+    version: '1.0.0',
+    source: 'کتاب بہشتی زیور (مولانا اشرف علی تھانویؒ)',
+    timestamp: new Date().toISOString()
+  });
 };
