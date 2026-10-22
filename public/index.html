@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <title>AI بہشتی زیور - مستند شرعی سوال و جواب</title>
+  
+  <!-- PWA مینیفیسٹ اور موبائل ایپ سپورٹ -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0f4c3a">
+  <meta name="application-name" content="بہشتی زیور AI">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="بہشتی زیور AI">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+  
+  <!-- گوگل اردو و عربی فونٹس -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Nastaliq+Urdu:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- فونٹ اوسم شبیہیں -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- کسٹم سی ایس ایس -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ہیڈر / نیویگیشن -->
+  <header class="app-header">
+    <div class="container header-inner">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <img src="/icons/icon.svg" alt="بہشتی زیور AI لوگو" class="app-header-icon">
+        </div>
+        <div class="logo-text">
+          <h1>AI بہشتی زیور</h1>
+          <p class="subtitle">واحد علمی ماخذ: کتاب بہشتی زیور (تالیف: حکیم الامت مولانا اشرف علی تھانویؒ)</p>
+        </div>
+      </div>
+      
+      <div class="header-actions">
+        <button id="btnHeaderInstall" class="btn btn-gold btn-header-install hidden" title="موبائل ایپ انسٹال کریں">
+          <i class="fa-solid fa-mobile-screen-button"></i>
+          <span>ایپ انسٹال کریں</span>
+        </button>
+        <button id="btnBrowseModal" class="btn btn-outline" title="کتاب کے ابواب پڑھیں">
+          <i class="fa-solid fa-book-open"></i>
+          <span>کتاب کی ورق گردانی</span>
+        </button>
+        <button id="btnUploadModal" class="btn btn-outline" title="پی ڈی ایف یا نیا متن شامل کریں">
+          <i class="fa-solid fa-file-pdf"></i>
+          <span>کتاب کا متن / PDF انتظام</span>
+        </button>
+        <button id="btnSettingsModal" class="btn btn-icon" title="ترتیبات / API Key">
+          <i class="fa-solid fa-gear"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- PWA موبائل انسٹال پرومپٹ بینر -->
+  <div id="pwaInstallBanner" class="pwa-install-banner hidden">
+    <div class="container pwa-banner-inner">
+      <div class="pwa-banner-info">
+        <img src="/icons/icon.svg" alt="App Icon" class="pwa-banner-icon">
+        <div class="pwa-banner-text">
+          <strong>بہشتی زیور AI ایپ انسٹال کریں</strong>
+          <p>موبائل اسکرین پر اصلی ایپ کی طرح چلائیں، تیز رفتار اور آسان رسائی</p>
+        </div>
+      </div>
+      <div class="pwa-banner-actions">
+        <button id="btnPwaInstall" class="btn btn-gold btn-sm">
+          <i class="fa-solid fa-download"></i>
+          <span>انسٹال کریں</span>
+        </button>
+        <button id="btnPwaDismiss" class="btn btn-outline btn-sm">
+          <span>بعد میں</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- بنیادی انتباہ و شرعی ضابطہ -->
+  <div class="strict-banner">
+    <div class="container">
+      <div class="banner-content">
+        <span class="badge-gold"><i class="fa-solid fa-shield-halved"></i> شرعی و فنی ضابطہ:</span>
+        <p>
+          یہ ویب سائٹ صرف کتاب <strong>بہشتی زیور</strong> سے تصدیق شدہ مسائل تلاش کر کے جواب دیتی ہے۔ کسی بیرونی اسلامی ماخذ، دیگر کتاب یا عمومی AI علم سے جواب دینا ممنوع ہے۔ غیر متعلقہ سوال پر واضح انکار کیا جاتا ہے۔
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- مرکزی کنٹینر -->
+  <main class="main-content container">
+
+    <!-- تلاش کا سیکشن -->
+    <section class="search-section card">
+      <div class="section-title">
+        <h2><i class="fa-solid fa-magnifying-glass"></i> مسئلہ دریافت فرمائیں</h2>
+        <span class="subtext">اپنا شرعی سوال اردو میں درج کریں، نظام بہشتی زیور کے محفوظ شدہ متن میں تلاش کرے گا</span>
+      </div>
+
+      <form id="searchForm" class="search-form">
+        <div class="search-input-wrapper">
+          <input 
+            type="text" 
+            id="queryInput" 
+            placeholder="مثال: وضو کے فرائض کیا ہیں؟ یا سونے پر زکوٰۃ کا نصاب کیا ہے؟" 
+            autocomplete="off"
+            required
+          />
+          <button type="button" id="btnVoice" class="btn-voice" title="آواز سے سوال پوچھیں">
+            <i class="fa-solid fa-microphone"></i>
+          </button>
+          <button type="submit" id="btnSearch" class="btn btn-primary">
+            <i class="fa-solid fa-search"></i>
+            <span>تلاش کریں</span>
+          </button>
+        </div>
+
+        <div class="search-filters">
+          <div class="filter-group">
+            <label for="volumeSelect"><i class="fa-solid fa-filter"></i> جلد / حصہ منتخب کریں:</label>
+            <select id="volumeSelect">
+              <option value="">مکمل بہشتی زیور (تمام حصے)</option>
+              <option value="1">جلد اول (حصہ اول) - عقائد و ایمانیات</option>
+              <option value="2">جلد دوم (حصہ دوم) - طہارت و نماز</option>
+              <option value="3">جلد سوم (حصہ سوم) - روزہ و زکوٰۃ و حج</option>
+              <option value="4">جلد چہارم (حصہ چہارم) - نکاح و طلاق و عدت</option>
+              <option value="5">جلد پنجم (حصہ پنجم) - خرید و فروخت و سود</option>
+              <option value="6">جلد ششم (حصہ ششم) - رسوم و رواج سے پرہیز</option>
+              <option value="7">جلد ہفتم (حصہ ہفتم) - اخلاق و آداب و حقوق</option>
+              <option value="8">جلد ہشتم (حصہ ہشتم) - قربانی و متفرق مسائل</option>
+            </select>
+          </div>
+
+          <div class="active-mode-indicator" id="systemModeBadge">
+            <i class="fa-solid fa-circle-check text-success"></i>
+            <span id="systemModeText">تصدیق شدہ بہشتی زیور انجن فعال ہے</span>
+          </div>
+        </div>
+      </form>
+
+      <!-- منتخب مقبول سوالات (Quick Suggestions) -->
+      <div class="quick-chips">
+        <span class="chips-label"><i class="fa-solid fa-lightbulb"></i> عام دریافت شدہ مسائل:</span>
+        <button class="chip" data-q="وضو کے کتنے فرائض ہیں؟">وضو کے فرائض</button>
+        <button class="chip" data-q="غسل کے فرائض کیا ہیں اور اس کا سنت طریقہ کیا ہے؟">غسل کے فرائض</button>
+        <button class="chip" data-q="نماز کے تیرہ فرائض کون سے ہیں؟">نماز کے ۱۳ فرائض</button>
+        <button class="chip" data-q="سجدہ سہو کب واجب ہوتا ہے اور اس کا طریقہ کیا ہے؟">سجدہ سہو کا طریقہ</button>
+        <button class="chip" data-q="مسافر نماز میں قصر کیسے کرے اور کتنے فاصلے پر؟">مسافر کی نماز و قصر</button>
+        <button class="chip" data-q="سونے اور چاندی پر زکوٰۃ کا کیا نصاب ہے؟">زکوٰۃ کا نصاب</button>
+        <button class="chip" data-q="کیا عورت کے استعمال کے زیورات پر زکوٰۃ واجب ہے؟">زیورات پر زکوٰۃ</button>
+        <button class="chip" data-q="روزہ کن چیزوں سے نہیں ٹوٹتا؟">جن سے روزہ نہیں ٹوٹتا</button>
+        <button class="chip" data-q="نکاح کی شرائط اور گواہ کے کیا احکام ہیں؟">نکاح کی شرائط</button>
+        <button class="chip" data-q="طلاق رجعی اور طلاق بائن میں کیا فرق ہے؟">طلاق کے احکام</button>
+        <button class="chip" data-q="قربانی کن لوگوں پر واجب ہے اور جانور کی کیا شرائط ہیں؟">قربانی کے احکام</button>
+      </div>
+    </section>
+
+    <!-- لودنگ انڈیکیٹر -->
+    <div id="loadingState" class="loading-state hidden">
+      <div class="spinner"></div>
+      <p class="loading-text">کتاب بہشتی زیور کے مستند اوراق میں تلاش جاری ہے...</p>
+      <span class="loading-sub">متعلقہ جلد، باب اور اصل عبارت کی تصدیق کی جا رہی ہے</span>
+    </div>
+
+    <!-- جواب کا کارڈ (Results Card) -->
+    <section id="resultContainer" class="result-container hidden">
+
+      <!-- اگر سوال کتاب میں نہ ملے تو انکار کا نوٹس -->
+      <div id="refusalCard" class="refusal-card hidden">
+        <div class="refusal-icon">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <div class="refusal-content">
+          <h3>کتاب سے باہر سوال کا شرعی اعلان</h3>
+          <p id="refusalMessage" class="refusal-text">
+            معذرت، فراہم کردہ کتاب بہشتی زیور میں اس سوال کا متعلقہ جواب نہیں مل سکا۔ یہ ٹول صرف اسی کتاب کی بنیاد پر جواب دیتا ہے۔
+          </p>
+          <div class="refusal-reason-box">
+            <i class="fa-solid fa-info-circle"></i>
+            <span>شرعی حفظِ مراتب کے پیشِ نظر AI کو کسی غیر کتابی ذریعے، ذاتی قیاس یا بیرونی فتوے سے جواب دینے کی ممانعت ہے۔</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- اگر سوال کا مستند جواب مل جائے تو مکمل تصدیق شدہ کارڈ -->
+      <div id="answerCard" class="answer-card card hidden">
+        
+        <!-- جواب کا بالائی حصہ اور حوالہ -->
+        <div class="answer-header">
+          <div class="masala-meta">
+            <span class="badge-volume" id="resVolume">جلد دوم (حصہ دوم)</span>
+            <span class="badge-chapter" id="resChapter">وضو کا بیان</span>
+            <span class="badge-masala" id="resMasala">مسئلہ نمبر ۱</span>
+            <span class="badge-page" id="resPage">صفحہ ۵۲</span>
+          </div>
+          <div class="answer-actions">
+            <button id="btnSpeak" class="btn-action" title="آواز میں سنیں">
+              <i class="fa-solid fa-volume-high"></i>
+              <span>سنیں</span>
+            </button>
+            <button id="btnCopy" class="btn-action" title="حوالے سمیت کاپی کریں">
+              <i class="fa-solid fa-copy"></i>
+              <span>کاپی کریں</span>
+            </button>
+          </div>
+        </div>
+
+        <h3 class="answer-title" id="resTitle">وضو کے چار فرائض</h3>
+
+        <!-- 1. اصل کتابی عبارت (Verbatim Original Text) -->
+        <div class="text-block original-block">
+          <div class="block-label">
+            <i class="fa-solid fa-book-bookmark"></i>
+            <strong>۱۔ کتاب بہشتی زیور کی اصل عبارت:</strong>
+            <span class="label-note">(لفظ بہ لفظ منقول شدہ)</span>
+          </div>
+          <div class="block-content nastaliq" id="resOriginalText">
+            <!-- اصل عبارت یہاں ظاہر ہوگی -->
+          </div>
+        </div>
+
+        <!-- 2. آسان اردو تشریح (Easy Urdu Explanation) -->
+        <div class="text-block easy-block">
+          <div class="block-label">
+            <i class="fa-solid fa-feather-pointed"></i>
+            <strong>۲۔ آسان اردو میں مفہوم و تشریح:</strong>
+            <span class="label-note">(کتاب کے اصل حکم، شرائط و حدود کے عین مطابق)</span>
+          </div>
+          <div class="block-content" id="resEasyExplanation">
+            <!-- آسان تشریح یہاں ظاہر ہوگی -->
+          </div>
+        </div>
+
+        <!-- 3. تصدیق شدہ حوالہ (Verified Citation) -->
+        <div class="citation-box">
+          <div class="citation-header">
+            <i class="fa-solid fa-stamp"></i>
+            <strong>۳۔ تصدیق شدہ کتابی حوالہ:</strong>
+          </div>
+          <div class="citation-grid">
+            <div class="cit-item">
+              <span class="cit-label">کتاب:</span>
+              <span class="cit-val">بہشتی زیور (مولانا اشرف علی تھانویؒ)</span>
+            </div>
+            <div class="cit-item">
+              <span class="cit-label">جلد / حصہ:</span>
+              <span class="cit-val" id="citVolume">-</span>
+            </div>
+            <div class="cit-item">
+              <span class="cit-label">باب و فصل:</span>
+              <span class="cit-val" id="citChapter">-</span>
+            </div>
+            <div class="cit-item">
+              <span class="cit-label">صفحہ نمبر:</span>
+              <span class="cit-val" id="citPage">-</span>
+            </div>
+            <div class="cit-item">
+              <span class="cit-label">مسئلہ نمبر:</span>
+              <span class="cit-val" id="citMasala">-</span>
+            </div>
+            <div class="cit-item">
+              <span class="cit-label">سورس اسٹیٹس:</span>
+              <span class="cit-val text-success"><i class="fa-solid fa-check-double"></i> ڈیٹا بیس سے ۱۰۰٪ تصدیق شدہ</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- متعلقہ ذیلی مسائل (Related Rulings) -->
+        <div id="relatedSection" class="related-section hidden">
+          <h4><i class="fa-solid fa-link"></i> بہشتی زیور کے مزید متعلقہ مسائل:</h4>
+          <div class="related-grid" id="relatedCards">
+            <!-- متعلقہ مسائل کے کارڈز یہاں شامل ہوں گے -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- بہشتی زیور کے اہم ابواب پر ایک نظر (Overview of Books) -->
+    <section class="volumes-overview card">
+      <div class="section-title">
+        <h2><i class="fa-solid fa-layer-group"></i> بہشتی زیور کے اجزاء و مشمولات</h2>
+        <span class="subtext">اس AI ٹول میں بہشتی زیور کے تمام بنیادی حصوں کا فقہی مواد محفوظ اور قابلِ تلاش ہے</span>
+      </div>
+
+      <div class="volumes-grid">
+        <div class="vol-card" onclick="filterByVolume(1)">
+          <div class="vol-number">حصہ ۱</div>
+          <div class="vol-info">
+            <h3>ایمانیات و عقائد</h3>
+            <p>ایمان، ارکانِ اسلام، توحید، رسالت، کفر و شرک کی باتیں اور بنیادی اسلامی عقائد۔</p>
+          </div>
+        </div>
+
+        <div class="vol-card" onclick="filterByVolume(2)">
+          <div class="vol-number">حصہ ۲</div>
+          <div class="vol-info">
+            <h3>طہارت و نماز</h3>
+            <p>وضو، غسل، استنجا، نجاستیں، تیمم، حیض، نفاس، ارکانِ نماز، اوقات، قصر اور سجدہ سہو۔</p>
+          </div>
+        </div>
+
+        <div class="vol-card" onclick="filterByVolume(3)">
+          <div class="vol-number">حصہ ۳</div>
+          <div class="vol-info">
+            <h3>روزہ، زکوٰۃ و حج</h3>
+            <p>روزے کی نیت، مفسدات و کفارہ، سونا چاندی پر زکوٰۃ کا نصاب، صدقہ فطر اور حج کے احکام۔</p>
+          </div>
+        </div>
+
+        <div class="vol-card" onclick="filterByVolume(4)">
+          <div class="vol-number">حصہ ۴</div>
+          <div class="vol-info">
+            <h3>نکاح، طلاق و عدت</h3>
+            <p>ایجاب و قبول، محرمات، مہر، طلاق کی اقسام، رجوع، عدت، نفقہ اور رضاعت کے مسائل۔</p>
+          </div>
+        </div>
+
+        <div class="vol-card" onclick="filterByVolume(5)">
+          <div class="vol-number">حصہ ۵</div>
+          <div class="vol-info">
+            <h3>معاملات و سود</h3>
+            <p>خرید و فروخت کی شرائط، بیع فاسد، سود (ربوا) کی حرمت، قرض، امانت، رہن اور اجارہ۔</p>
+          </div>
+        </div>
+
+        <div class="vol-card" onclick="filterByVolume(7)">
+          <div class="vol-number">حصہ ۷</div>
+          <div class="vol-info">
+            <h3>حقوق و اخلاق</h3>
+            <p>والدین اور رشتہ داروں کے حقوق، پڑوسی، زبان کی حفاظت، پردہ اور اخلاقِ حسنہ۔</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ماڈل ۱: کتاب کی ورق گردانی / فہرست و ابواب (Browse Modal) -->
+  <div id="browseModal" class="modal hidden">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fa-solid fa-book-open"></i> بہشتی زیور - فہرست و اوراق کی ورق گردانی</h3>
+          <button class="btn-close" onclick="closeModal('browseModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-search-row">
+            <input type="text" id="browseSearchInput" placeholder="باب، مسئلہ یا لفظ تلاش کریں..." oninput="filterBrowseList()">
+            <select id="browseVolumeFilter" onchange="filterBrowseList()">
+              <option value="">تمام جلدیں</option>
+              <option value="1">حصہ ۱ (عقائد)</option>
+              <option value="2">حصہ ۲ (طہارت و نماز)</option>
+              <option value="3">حصہ ۳ (روزہ و زکوٰۃ)</option>
+              <option value="4">حصہ ۴ (نکاح و طلاق)</option>
+              <option value="5">حصہ ۵ (معاملات و سود)</option>
+              <option value="7">حصہ ۷ (اخلاق و حقوق)</option>
+              <option value="8">حصہ ۸ (قربانی و متفرق)</option>
+            </select>
+          </div>
+          
+          <div id="browseList" class="browse-items-list">
+            <!-- آئٹمز یہاں جاوا اسکرپٹ سے آئیں گے -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ماڈل ۲: کتاب کا متن / پی ڈی ایف انتظام (PDF Ingestion Modal) -->
+  <div id="uploadModal" class="modal hidden">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fa-solid fa-file-pdf"></i> بہشتی زیور متن و PDF انڈیکسنگ</h3>
+          <button class="btn-close" onclick="closeModal('uploadModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="tab-buttons">
+            <button class="tab-btn active" onclick="switchUploadTab('pdfTab')">PDF فائل اپلوڈ</button>
+            <button class="tab-btn" onclick="switchUploadTab('manualTab')">نیا مسئلہ دستی درج کریں</button>
+          </div>
+
+          <!-- PDF اپلوڈ ٹیب -->
+          <div id="pdfTab" class="tab-content active">
+            <p class="tab-desc">بہشتی زیور کی کسی بھی جلد یا باب کی پی ڈی ایف فائل اپلوڈ کریں، سسٹم خودکار طریقے سے صفحات کے حساب سے متن انڈیکس کر لے گا۔</p>
+            <form id="pdfUploadForm" enctype="multipart/form-data">
+              <div class="form-group">
+                <label>پی ڈی ایف فائل منتخب کریں:</label>
+                <input type="file" id="pdfFileInput" name="pdfFile" accept="application/pdf" required>
+              </div>
+              <div class="form-row">
+                <div class="form-group half">
+                  <label>جلد / حصہ نمبر:</label>
+                  <select name="volume_num" id="pdfVolumeNum">
+                    <option value="1">حصہ اول</option>
+                    <option value="2" selected>حصہ دوم</option>
+                    <option value="3">حصہ سوم</option>
+                    <option value="4">حصہ چہارم</option>
+                    <option value="5">حصہ پنجم</option>
+                    <option value="6">حصہ ششم</option>
+                    <option value="7">حصہ ہفتم</option>
+                    <option value="8">حصہ ہشتم</option>
+                  </select>
+                </div>
+                <div class="form-group half">
+                  <label>ابتدائی صفحہ نمبر:</label>
+                  <input type="number" name="startPage" id="pdfStartPage" value="1" min="1">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>باب / عنوان کا نام:</label>
+                <input type="text" name="chapter" id="pdfChapter" placeholder="مثلاً: باب الصلاۃ یا کتاب الزکوٰۃ">
+              </div>
+              <button type="submit" id="btnSubmitPdf" class="btn btn-primary btn-block">
+                <i class="fa-solid fa-cloud-arrow-up"></i> پی ڈی ایف اپلوڈ اور محفوظ کریں
+              </button>
+            </form>
+            <div id="pdfUploadStatus" class="upload-status hidden"></div>
+          </div>
+
+          <!-- دستی اندراج ٹیب -->
+          <div id="manualTab" class="tab-content">
+            <p class="tab-desc">کتاب بہشتی زیور کے کسی مخصوص ایڈیشن سے اصل عبارت بمع حوالہ دستی طور پر محفوظ کریں۔</p>
+            <form id="manualEntryForm">
+              <div class="form-group">
+                <label>مسئلے کا عنوان:</label>
+                <input type="text" id="manTitle" placeholder="مثلاً: مسواک کے مستحبات" required>
+              </div>
+              <div class="form-row">
+                <div class="form-group half">
+                  <label>جلد کا نام:</label>
+                  <input type="text" id="manVolume" value="جلد دوم (حصہ دوم)" required>
+                </div>
+                <div class="form-group half">
+                  <label>صفحہ نمبر:</label>
+                  <input type="text" id="manPage" placeholder="مثلاً: صفحہ ۵۵" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group half">
+                  <label>باب / فصل:</label>
+                  <input type="text" id="manChapter" placeholder="مثلاً: وضو کا بیان" required>
+                </div>
+                <div class="form-group half">
+                  <label>مسئلہ نمبر:</label>
+                  <input type="text" id="manMasala" placeholder="مثلاً: مسئلہ نمبر ۴">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>اصل کتابی عبارت (بہشتی زیور سے):</label>
+                <textarea id="manOriginalText" rows="4" placeholder="کتاب کی اصل عبارت بعینہٖ یہاں لکھیں..." required></textarea>
+              </div>
+              <div class="form-group">
+                <label>آسان تشریح:</label>
+                <textarea id="manEasyExplanation" rows="3" placeholder="حکم میں بغیر رد و بدل کے عام فہم اردو تشریح..."></textarea>
+              </div>
+              <div class="form-group">
+                <label>کلیدی الفاظ (کوما سے الگ کریں):</label>
+                <input type="text" id="manKeywords" placeholder="مسواک, وضو, طہارت, دانت صاف کرنا">
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">
+                <i class="fa-solid fa-save"></i> مسئلہ ڈیٹا بیس میں محفوظ کریں
+              </button>
+            </form>
+            <div id="manualUploadStatus" class="upload-status hidden"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ماڈل ۳: ترتیبات اور API کلید (Settings Modal) -->
+  <div id="settingsModal" class="modal hidden">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fa-solid fa-sliders"></i> سرور ترتیبات و جیمینائی کنفیگریشن</h3>
+          <button class="btn-close" onclick="closeModal('settingsModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="info-alert">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>حفاظتی ضابطہ: آپ کی API Key سرور کے <code>.env</code> میں محفوظ رہتی ہے اور براؤزر میں کبھی ظاہر نہیں کی جاتی۔</span>
+          </div>
+
+          <div class="config-status-row">
+            <span>جیمینائی اسسٹنٹ اسٹیٹس:</span>
+            <span id="cfgActiveBadge" class="badge-success">جانچ جاری ہے...</span>
+          </div>
+
+          <form id="apiKeyForm">
+            <div class="form-group">
+              <label for="inputApiKey">گوگل جیمینائی API Key (سرور سائیڈ):</label>
+              <input type="password" id="inputApiKey" placeholder="AIzaSy..." autocomplete="off">
+              <small>نوٹ: اگر API Key نہ بھی ہو تب بھی بہشتی زیور کا مکمل آف لائن سرچ انجن ۱۰۰ فیصد فعال رہتا ہے۔</small>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              <i class="fa-solid fa-key"></i> API Key سرور پر محفوظ کریں
+            </button>
+          </form>
+          <div id="apiKeyStatus" class="upload-status hidden"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- فوٹر -->
+  <footer class="app-footer">
+    <div class="container footer-inner">
+      <div class="footer-info">
+        <h4>AI بہشتی زیور</h4>
+        <p>مستند اسلامی فقہ حنفی کے مسائل کا ڈیجیٹل اور تصدیق شدہ پلیٹ فارم۔ ماخذ: حکیم الامت حضرت مولانا اشرف علی تھانویؒ کی شاہکار کتاب "بہشتی زیور"۔</p>
+      </div>
+      <div class="footer-stats" id="footerStats">
+        <span><i class="fa-solid fa-book"></i> محفوظ شدہ مسائل: <strong>لوڈ ہو رہے ہیں...</strong></span>
+      </div>
+      <div class="footer-copyright">
+        <p>© تمام حقوق بحق اسلامی نشر و اشاعت محفوظ ہیں۔ صرف مستند کتابی متن سے رہنمائی لیں۔</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- موبائل ایپ باٹم نیویگیشن بار (Mobile App Bottom Nav) -->
+  <nav class="mobile-app-bottom-nav">
+    <button class="nav-tab active" onclick="scrollToSearch(this)" title="تلاش">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <span>مسئلہ تلاش</span>
+    </button>
+    <button class="nav-tab" onclick="openModal('browseModal'); loadBrowseList();" title="ابواب">
+      <i class="fa-solid fa-book-open"></i>
+      <span>فہرست ابواب</span>
+    </button>
+    <button class="nav-tab" onclick="openModal('uploadModal')" title="پی ڈی ایف">
+      <i class="fa-solid fa-file-pdf"></i>
+      <span>پی ڈی ایف</span>
+    </button>
+    <button class="nav-tab" onclick="openModal('settingsModal'); checkConfigStatus();" title="ترتیبات">
+      <i class="fa-solid fa-gear"></i>
+      <span>ترتیبات</span>
+    </button>
+  </nav>
+
+  <!-- iOS Safari کے لیے انسٹال رہنمائی ماڈل -->
+  <div id="iosInstallModal" class="modal hidden">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fa-brands fa-apple"></i> آئی فون پر ایپ انسٹال کرنے کا طریقہ</h3>
+          <button class="btn-close" onclick="closeModal('iosInstallModal')">&times;</button>
+        </div>
+        <div class="modal-body" style="text-align: center;">
+          <img src="/icons/icon.svg" alt="App Icon" style="width: 80px; height: 80px; margin: 0 auto 15px; border-radius: 20px;">
+          <h4 style="color: var(--primary-dark); margin-bottom: 12px;">بہشتی زیور AI کو ہوم اسکرین پر شامل کریں</h4>
+          <ol style="text-align: right; padding-right: 25px; line-height: 2.2; font-size: 15px;">
+            <li>سفاری (Safari) کے نیچے موجود <strong>شیئر بٹن</strong> (<i class="fa-solid fa-arrow-up-from-bracket"></i>) پر ٹیپ کریں۔</li>
+            <li>نیچے اسکرول کر کے <strong>'Add to Home Screen'</strong> (ہوم اسکرین میں شامل کریں) کو منتخب کریں۔</li>
+            <li>اوپر دائیں جانب <strong>'Add'</strong> پر ٹیپ کریں۔</li>
+          </ol>
+          <button class="btn btn-primary btn-block" style="margin-top: 20px;" onclick="closeModal('iosInstallModal')">سمجھ گیا</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- جاوا اسکرپٹ فائل -->
+  <script src="js/app.js"></script>
+</body>
+</html>
+
